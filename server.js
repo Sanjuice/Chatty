@@ -12,7 +12,7 @@ const io = socketio(server);
 
 // set static folder
 app.use(express.static(path.join(__dirname, 'public')));
-const botName = 'Sanju';
+const botName = 'Chatty';
 
 
 //Run when clinet connects
