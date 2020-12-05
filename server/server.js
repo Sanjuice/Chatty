@@ -1,23 +1,31 @@
-const path = require('path');
-const http = require('http');
-const express = require('express');
-const socketio = require('socket.io');
-const formatMessage = require('./utils/messages');
-const {userJoin, getCurrentUser, userLeave, getRoomUsers } = require('./utils/users');
+const express = require("express");
+const http = require("http");
+const socketIo = require("socket.io");
 
+//Port from environment variable or default - 4001
+const port = process.env.PORT || 5000;
 
+//Setting up express and adding socketIo middleware
 const app = express();
 const server = http.createServer(app);
-const io = socketio(server);
+const io = socketIo(server);
+//const formatMessage = require('./utils/messages');
+//const {userJoin, getCurrentUser, userLeave, getRoomUsers } = require('./utils/users');
+
+
+const router = require('./router');
 
 // set static folder
-app.use(express.static(path.join(__dirname, 'public')));
+//app.use(express.static(path.join(__dirname, 'public')));
 const botName = 'Chatty';
 
+app.use(router);
 
 //Run when clinet connects
 
-io.on('connection', socket => {
+io.on('connection', (socket) => {
+    console.log("new user!");
+
     socket.on('joinRoom', ({username, room}) => {
         const user = userJoin(socket.id,username, room);
 
@@ -51,9 +59,12 @@ io.on('connection', socket => {
 
     //Runs when client disconnects
     socket.on('disconnect', () => {
-        const user = userLeave(socket.id);
+        //const user = userLeave(socket.id);
 
-        if(user) {
+        console.log("user is gone!");
+
+
+        /*if(user) {
             io.to(user.room).emit('message', formatMessage(botName,`${user.username} has left the chat`));
 
             // Send users and room info
@@ -62,12 +73,12 @@ io.on('connection', socket => {
             users: getRoomUsers(user.room)
     } );
 
-        }
+        }*/
 
     });
 
 });
 
-const PORT = process.env.PORT || 3000;
+//const PORT = 4000 || process.env.PORT ;
 
-server.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+server.listen(port, () => console.log(`Server running on port ${port}`));
