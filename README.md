@@ -1,23 +1,25 @@
 # Chatty
 
 ## Description
-This is a Vanilla JS application that runs on a backend of express, node.js and socket.io. Currently, a user can type in their username and join one of the rooms. The next iteration takes the app from Vanilla JS implementation on the front end to one primarily composed of Lit-element and one where users can create new rooms and send the links for rooms to invite friends to join rooms.
-
-**Due to time constraints, the app has been expanded on with react instead of lit-element and can be found in the react-version branch**
+This is a React.js application that runs on a backend of express, node.js and socket.io. Currently, a user can type in their username and create a room and then join it. The room name can be used by a different users to connect to one room.
 
 ## Libraries and tools used
+- React.js
+- Bulma CSS
 - Express
 - Socket.io
-- Vanilla JavaScript
 - node.js
+
+## Screnshots
+![Chatty join page](chatty1.png)
+![Chatty chat page](chatty2.png)
 
 ## Run app locally
 1. Clone the repo
-2. npm install the dependencies
-3. npm run dev to run the application locally
+2. npm install the dependencies for both the client and the server directories
+3. npm run dev in the server directory
+4. npm start in the client directory
 
 ## References
+[Tutorial to connect a react app to a node.js socket server](https://www.youtube.com/watch?v=ZwFA3YMfkoc&t=2266s)
 
-[Tutorial to build chat application with vanilla Js](https://www.youtube.com/watch?v=jD7FnbI76Hg)
-
-Screenshots to come soon.
