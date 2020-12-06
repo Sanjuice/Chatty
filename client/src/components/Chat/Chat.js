@@ -76,9 +76,23 @@ const Chat = ({ location }) => {
               </div>
               <div class="column is-9">
                 <div className="box">
-                    <div className="box-header is-flex is-flex-direction-row is-justify-content-space-between">
-                    <h1 class="title has-text-black">{room}</h1>
-                    <a href="/"> <img src="https://img.icons8.com/pastel-glyph/64/000000/cancel--v1.png"/> </a>
+                    <div className="level">
+                        <div className="level-left">
+                            <div className="level-item">
+                            <h1 class="title has-text-black">{room}</h1>
+
+                            </div>
+
+                        </div>
+                        <div className="level-right">
+                            <div className="level-item">
+                            <a href="/"> <img src="https://img.icons8.com/pastel-glyph/64/000000/cancel--v1.png" width="40px" height="40px"/> </a>
+
+                                
+                            </div>
+
+                        </div>
+                    
                     
 
                     
@@ -89,7 +103,9 @@ const Chat = ({ location }) => {
                   <div className="something" style={chatStyles}>
                       <Messages messages={messages} name={name}></Messages>
                   </div>
-                  <div className="inputStuff">
+                  <div className="columns is-1">
+                        <div className="column is-10">
+                        <p class="control is-expanded">
                   <input
                     value={message}
                     className="input"
@@ -99,12 +115,17 @@ const Chat = ({ location }) => {
                       event.key === "Enter" ? sendMessage(event) : null
                     }
                   />
+                  </p>
+                  </div>
+                  <div className="column is-2 is-centered">
                   
-                  <button className="button" onClick={(event) =>
+                  <button className="button is-primary ml-2" onClick={(event) =>
                        sendMessage(event) 
                     }>
                       Send
                   </button>
+                  </div>
+
 
                   </div>
                   
