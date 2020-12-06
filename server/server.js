@@ -44,10 +44,10 @@ io.on('connection', (socket) => {
     socket.join(user.room);
 
     // Send users and room info
-    /*io.to(user.room).emit('roomUsers', {
+    io.to(user.room).emit('roomUsers', {
         room: user.room,
         users: getRoomUsers(user.room)
-    } );*/
+    } );
 
     callback();
     });
@@ -59,6 +59,8 @@ io.on('connection', (socket) => {
     {
         const user = getCurrentUser(socket.id);
 
+        console.log(user);
+
         io.to(user.room).emit('message', { user: user.name, text: message});
 
         callback();
@@ -66,13 +68,13 @@ io.on('connection', (socket) => {
 
     //Runs when client disconnects
     socket.on('disconnect', () => {
-        //const user = userLeave(socket.id);
+        const user = userLeave(socket.id);
 
         console.log("user is gone!");
 
 
-        /*if(user) {
-            io.to(user.room).emit('message', formatMessage(botName,`${user.username} has left the chat`));
+        if(user) {
+            io.to(user.room).emit('message', {user:botName,text:`${user.name} has left the chat`});
 
             // Send users and room info
             io.to(user.room).emit('roomUsers', {
@@ -80,7 +82,7 @@ io.on('connection', (socket) => {
             users: getRoomUsers(user.room)
     } );
 
-        }*/
+        }
 
     });
 

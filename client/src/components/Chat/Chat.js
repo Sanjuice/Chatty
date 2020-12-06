@@ -2,12 +2,21 @@ import React, { useState, useEffect } from "react";
 import queryString from "query-string";
 import io from "socket.io-client";
 import userEvent from "@testing-library/user-event";
+import Messages from "../Messages/Messages";
+import Message from "../Message/Message";
+import Room from '../Room/Room';
 
 let socket;
+
+let chatStyles = {
+    height:"500px",
+    overflow:"scroll"
+}
 
 const Chat = ({ location }) => {
   const [name, setName] = useState("");
   const [room, setRoom] = useState("");
+  const [users, setUsers] = useState("");
   const [message, setMessage] = useState("");
   const [messages, setMessages] = useState([]);
   const ENDPOINT = "http://127.0.0.1:5000";
@@ -36,7 +45,11 @@ const Chat = ({ location }) => {
     socket.on("message", (message) => {
       setMessages([...messages, message]);
     });
-  }, [messages]);
+
+    socket.on("roomUsers", ({ users }) => {
+        setUsers(users);
+      });
+  }, []);
 
   const sendMessage = (event) => {
     event.preventDefault();
@@ -58,6 +71,7 @@ const Chat = ({ location }) => {
                 {" "}
                 <div className="box">
                 <h1 class="subtitle has-text-black">Online</h1>
+                <Room users={users}></Room>
                 </div>
               </div>
               <div class="column is-9">
@@ -72,7 +86,9 @@ const Chat = ({ location }) => {
                     </div>
                   
                   <hr />
-                  <div className="something" style={{height:"500px"}}></div>
+                  <div className="something" style={chatStyles}>
+                      <Messages messages={messages} name={name}></Messages>
+                  </div>
                   <div className="inputStuff">
                   <input
                     value={message}
