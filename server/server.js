@@ -1,60 +1,67 @@
-const express = require("express");
-const http = require("http");
-const socketIo = require("socket.io");
+const http = require('http');
+const express = require('express');
+const socketio = require('socket.io');
+const cors = require('cors');
 
-//Port from environment variable or default - 4001
-const port = process.env.PORT || 5000;
-
-//Setting up express and adding socketIo middleware
-const app = express();
-const server = http.createServer(app);
-const io = socketIo(server);
-//const formatMessage = require('./utils/messages');
-//const {userJoin, getCurrentUser, userLeave, getRoomUsers } = require('./utils/users');
-
+const { userJoin, getCurrentUser, userLeave, getRoomUsers  } = require('./users');
 
 const router = require('./router');
+
+const app = express();
+const server = http.createServer(app);
+const io = socketio(server);
+
+app.use(cors());
+app.use(router);
 
 // set static folder
 //app.use(express.static(path.join(__dirname, 'public')));
 const botName = 'Chatty';
 
-app.use(router);
 
 //Run when clinet connects
 
 io.on('connection', (socket) => {
     console.log("new user!");
 
-    socket.on('joinRoom', ({username, room}) => {
-        const user = userJoin(socket.id,username, room);
+    socket.on('joinRoom', ({name, room}, callback) => {
+        console.log(name +" " +room);
+        
+        const {error, user} = userJoin({id:socket.id, name, room});
 
+        
 
-        socket.join(user.room);
-        socket.emit('message', formatMessage(botName,'Welcome to Chatty'));
+        if(error) {
+            return callback(error);
+        }
+
+        
+        socket.emit('message', {user: botName, text:`Welcome to the room ${user.room}`});
 
 
     //Broadcast when a user connects
-    socket.broadcast.to(user.room).emit('message', formatMessage(botName,`${user.username} has joined the chat`));
-
+    socket.broadcast.to(user.room).emit('message', { user: botName, text:`${user.username} has joined the chat`});
+    socket.join(user.room);
 
     // Send users and room info
-    io.to(user.room).emit('roomUsers', {
+    /*io.to(user.room).emit('roomUsers', {
         room: user.room,
         users: getRoomUsers(user.room)
-    } );
+    } );*/
 
-    
+    callback();
     });
     
     
     
     //Listen for chatMessage
-    socket.on('chatMessage', msg =>
+    socket.on('chatMessage', (message, callback) =>
     {
         const user = getCurrentUser(socket.id);
 
-        io.to(user.room).emit('message', formatMessage(user.username,msg));
+        io.to(user.room).emit('message', { user: user.name, text: message});
+
+        callback();
     });
 
     //Runs when client disconnects
@@ -81,4 +88,7 @@ io.on('connection', (socket) => {
 
 //const PORT = 4000 || process.env.PORT ;
 
-server.listen(port, () => console.log(`Server running on port ${port}`));
+//app.use(router);
+
+
+server.listen(process.env.PORT || 5000, () => console.log(`Server running`));

@@ -1,12 +1,23 @@
 const users = [];
 
 //Join user to chat
-function userJoin(id, username, room) {
-    const user = {id, username, room};
+const userJoin = ({id, name, room}) => {
+    console.log(name);
+    
+    name = name.trim().toLowerCase();
+    room = room.trim().toLowerCase();
+
+    const user = {id, name, room};
+
+    const existingUser = users.find((user) => user.name == name && user.room === room);
+
+    if(existingUser) {
+        return {error: 'Username is taken'}
+    }
 
     users.push(user);
 
-    return user;
+    return {user};
 }
 
 //Get current user 
