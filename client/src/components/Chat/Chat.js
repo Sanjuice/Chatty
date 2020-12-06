@@ -49,7 +49,7 @@ const Chat = ({ location }) => {
     socket.on("roomUsers", ({ users }) => {
         setUsers(users);
       });
-  }, []);
+  }, [messages]);
 
   const sendMessage = (event) => {
     event.preventDefault();
