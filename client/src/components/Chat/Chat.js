@@ -73,6 +73,7 @@ const Chat = ({ location }) => {
                   
                   <hr />
                   <div className="something" style={{height:"500px"}}></div>
+                  <div className="inputStuff">
                   <input
                     value={message}
                     className="input"
@@ -82,6 +83,15 @@ const Chat = ({ location }) => {
                       event.key === "Enter" ? sendMessage(event) : null
                     }
                   />
+                  
+                  <button className="button" onClick={(event) =>
+                       sendMessage(event) 
+                    }>
+                      Send
+                  </button>
+
+                  </div>
+                  
                 </div>
               </div>
             </div>
